@@ -2,7 +2,9 @@
 
 version="0.1.0"
 script_name=$0
-dottiesfile=$HOME/.dotties
+dotties_dir=$HOME/.dotties
+dotties_gist=$HOME/.dotties/gisturl
+dotties_file=$HOME/.dotties/dottiesfile
 
 check_cmd() {
     if [[ ! $(command -v "$1") ]]; then
@@ -67,19 +69,24 @@ EOF
 
 fn_create() {
     echo "Creating a dotties file."
-    find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1 >"$dottiesfile"
+    find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1 >"$dotties_file"
     echo "Please run $script_name -e or --edit to edit the file."
 }
 
 fn_gist_upload() {
-    # check if dotties is not empty, else exit
-    # without mapfile
-    arr=()
-    IFS=$'\n' read -ra arr -d '' <"$dottiesfile"
-    gh gist create "${arr[@]}"
+    # check if dotties exists and has a length greater than zero., else exit
+    if [[ -s $dotties_file ]]; then
+        # without mapfile
+        arr=()
+        IFS=$'\n' read -ra arr -d '' <"$dotties_file"
+        gh gist create "${arr[@]}"
     # this works
     # mapfile -t <$dottiesfile
     # gh gist create "${MAPFILE[@]}"
+    else
+        echo "Please run $script_name, and edit it by $script_name -e."
+    fi
+
 }
 
 fn_local() {
@@ -94,7 +101,7 @@ fn_recover() {
 }
 
 fn_read() {
-    cat "$dottiesfile"
+    cat "$dotties_file"
 }
 
 fn_edit() {
@@ -102,11 +109,11 @@ fn_edit() {
     ans=$(echo "$EANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
     if [[ $ans = "C" ]]; then
         check_cmd code || exit
-        code "$dottiesfile"
+        code "$dotties_file"
     elif [[ $ans = "E" ]]; then
-        "${EDITOR:-emacs}" "$dottiesfile"
+        "${EDITOR:-emacs}" "$dotties_file"
     elif [[ $ans = "V" ]]; then
-        "${EDITOR:-vi}" "$dottiesfile"
+        "${EDITOR:-vi}" "$dotties_file"
     else
         echo "Please use either v for vim, e for Emac, or c for VSCode."
         exit 1
@@ -114,8 +121,11 @@ fn_edit() {
 }
 
 fn_start() {
+    if [[ ! -d $dotties_dir ]]; then
+        mkdir "$dotties_dir"
+    fi
     # 1. If there is the $HOME/.dotties, confirm if you want to create a new dotties. o: open existing .dotties, yes: create a new dotties
-    if [[ -f "$HOME/.dotties" ]]; then
+    if [[ -f "$dotties_file" ]]; then
         # read -r
         echo "You have the dotties file."
         read -rp "Do you want to edit it, e/edit or to create a new, n/new.   " ANS
