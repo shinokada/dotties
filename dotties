@@ -153,10 +153,32 @@ fn_show_local() {
     find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1
 }
 
-fn_recover() {
-    echo recover
-    # confirm if use want to overwrite dotfiles
-    # get from a Gist url
+fn_clone_gist() {
+    if [[ -n $1 ]]; then
+        target_dir=$1
+    else
+        target_dir=$(pwd)
+    fi
+    read -rp "Do you want to clone in ${target_dir}? (y/n) (yes/no)   " ANS
+    ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+    if [[ $ans = "Y" ]]; then
+        read -r gist_url <"$dotties_gist"
+        gh gist clone "$gist_url" "$target_dir" || exit
+    else
+        echo "Exiting..."
+        exit
+    fi
+}
+
+fn_delete_gist() {
+    read -rp "Are you sure to delete the dotties gist? (y/n) (yes/no)   " ANS
+    ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+    if [[ $ans = "Y" ]]; then
+        gh gist delete "$dotties_gist" && rm "$dotties_gist" || exit
+    else
+        echo "Exiting..."
+        exit
+    fi
 }
 
 fn_read() {
@@ -209,6 +231,14 @@ main() {
             ;;
         -U | --updategist)
             fn_update_gist
+            exit
+            ;;
+        -C | --clone)
+            fn_clone_gist "$2"
+            exit
+            ;;
+        -D | --delete)
+            fn_delete_gist
             exit
             ;;
         -E | --Edit)
