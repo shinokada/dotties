@@ -16,10 +16,10 @@ check_cmd() {
 
 check_cmd gh
 
-if ((BASH_VERSINFO[0] < 4)); then
-    printf '%s\n' "Error: This requires Bash v4.0 or higher. You have version $BASH_VERSION." 1>&2
-    exit 2
-fi
+# if ((BASH_VERSINFO[0] < 4)); then
+#     printf '%s\n' "Error: This requires Bash v4.0 or higher. You have version $BASH_VERSION." 1>&2
+#     exit 2
+# fi
 
 # check if you are logged in github
 if [[ $(gh auth status) -eq 1 ]] >&/dev/null; then
@@ -211,6 +211,7 @@ fn_start() {
         exit
     else
         fn_create || exit
+        exit
     fi
 }
 

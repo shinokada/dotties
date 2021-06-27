@@ -3,12 +3,11 @@
 ## Overview
 
 Dotties is a simple dotfile management script.
-It saves specified dotfiles in the home directory to a Gist and recover from a Gist.
+It saves specified dotfiles in the home directory to a Gist and clone them from the Gist.
 
 ## Requirement
 
 GitHub CLI gh
-Bash version >= 4
 
 ## Installation
 
@@ -42,12 +41,46 @@ dotties -r
 dotties --read
 ```
 
+### Gist related options
+
 Save files in the `.dotties` to a Gist:
 
 ```sh
-dotties -g
+dotties -G
 # or
 dotties --gist
+```
+
+Update the Dotties Gist
+
+```sh
+dotties -U
+# or
+dotties --updategist
+```
+
+Clone the Dotties Gist
+
+```sh
+dotties -C
+# or
+dotties --clone
+```
+
+Delete the Dotties Gist
+
+```sh
+dotties -D
+# or
+dotties --delete
+```
+
+Edit the Dotties Gist
+
+```sh
+dotties -E
+# or
+dotties --Edit
 ```
 
 Update a Gist by URL or number
@@ -57,6 +90,11 @@ dotties -u [Gist number | URL]
 # or
 dotties --update [Gist number | URL]
 ```
+
+-E | --Edit
+
+
+### Other options
 
 List all dotfiles from your home dir:
 
