@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+version="0.0.1"
+script_name=$0
+
+check_cmd() {
+    if [[ ! $(command -v "$1") ]]; then
+        echo "It seems like you don't have $1."
+        echo "Please install $1. A mac user, you can try brew insatll $1."
+        exit 1
+    fi
+}
+
+check_cmd gh
+
+if ((BASH_VERSINFO[0] < 4)); then
+    printf '%s\n' "Error: This requires Bash v4.0 or higher. You have version $BASH_VERSION." 1>&2
+    exit 2
+fi
+
+# check if you are logged in github
+if [[ $(gh auth status) -eq 1 ]] >&/dev/null; then
+    # not logged-in
+    echo ">>> You must logged in. Use 'gh auth login'"
+    exit 1
+fi
+
+usage() {
+    cat <<EOF
+
+Description: Save all dotfiles in the home directory (default) to a Gist and recover from a Gist.
+
+Usage:
+
+
+EOF
+    exit
+}
+
+fn_create() {
+    echo create
+    # open dotties with vim or vscode
+}
+
+fn_gist_upload() {
+    # check if dotties is not empty, else exit
+    # without mapfile
+    arr=()
+    IFS=$'\n' read -ra arr -d '' <"$dottiesfile"
+    gh gist create "${arr[@]}"
+    # this works
+    # mapfile -t <$dottiesfile
+    # gh gist create "${MAPFILE[@]}"
+}
+
+fn_list() {
+    echo list
+    # list $HOME dotfiles withoug binaries
+}
+
+fn_recover() {
+    echo recover
+    # confirm if use want to overwrite dotfiles
+    # get from a Gist url
+}
+
+fn_start() {
+    # 1. If there is the $HOME/.dotties, confirm if you want to create a new dotties. o: open existing .dotties, yes: create a new dotties
+
+    # if there is no .dotties, then create a new
+
+    # echo new
+    # find all dotfile name from HOME
+    # tmpfile=$(mktemp /tmp/dotties)
+    dottiesfile=$HOME/.dotties
+    # tmpfile2=$HOME/dotties2
+    : >"$dottiesfile"
+    # touch $tmpfile2
+    # files=()
+    while IFS= read -r -d $'\0'; do
+        # echo "${file##*/}"
+        # files+=($'REPLY\n')
+        echo "$REPLY" >>"$dottiesfile"
+    done < <(find "$HOME" -name ".*" -maxdepth 1 -type f -print0)
+    # mapfile -d $'\0' files < <(find "$HOME" -name ".*" -maxdepth 1 -type f -print0)
+    # files=("${files[@]/*DS_Store/}")
+
+}
+
+main() {
+    if (($# > 0)); then
+        case $1 in
+        ls | --list)
+            fn_list
+            ;;
+        -g | --gist)
+            fn_gist_upload "$2"
+            exit
+            ;;
+        -r | --recover)
+            fn_recover "$2"
+            exit
+            ;;
+        -h | --help)
+            usage
+            ;;
+        -v | --version)
+            echo "${version}"
+            exit
+            ;;
+        *)
+            usage
+            ;;
+        esac
+    else
+        fn_start
+        exit
+    fi
+}
+
+main "$@"

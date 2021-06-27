@@ -1,0 +1,13 @@
+.bash_profile
+.bashrc
+.dotties
+.gitconfig
+.gitignore_global
+.lesshst
+.netrc
+.profile
+.viminfo
+.vimrc
+.yarnrc
+.zprofile
+.zshrc
