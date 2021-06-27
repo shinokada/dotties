@@ -26,12 +26,20 @@ Create a new `.dotties` file:
 dotties
 ```
 
-Open the `.dotties` file to edit:
+Edit the `.dotties` file to edit:
 
 ```sh
-dotties -o
+dotties -e
 # or
-dotties --open
+dotties --edit
+```
+
+Read the `dotties` file:
+
+```sh
+dotties -r
+# or
+dotties --read
 ```
 
 Save files in the `.dotties` to a Gist:
@@ -45,9 +53,9 @@ dotties --gist
 Update a Gist by URL or number
 
 ```sh
-dotties -u [number|URL]
+dotties -u [Gist number | URL]
 # or
-dotties --update [number|URL]
+dotties --update [Gist number | URL]
 ```
 
 List all dotfiles from your home dir:
@@ -61,9 +69,25 @@ dotties --local
 Recover all dotties from a Gist URL.
 
 ```sh
-dotties -r [number | URL]
+dotties -r [Gist number | URL]
 # or
-dotties --recover [number | URL]
+dotties --recover [Gist number | URL]
+```
+
+Print help.
+
+```sh
+dotties -h
+# or
+dotties --help
+```
+
+Print the version.
+
+```sh
+dotties -v
+# or
+dotties --version
 ```
 
 ## Author

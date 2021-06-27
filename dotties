@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-version="0.0.1"
+version="0.1.0"
 script_name=$0
+dottiesfile=$HOME/.dotties
 
 check_cmd() {
     if [[ ! $(command -v "$1") ]]; then
@@ -32,14 +33,42 @@ Description: Save all dotfiles in the home directory (default) to a Gist and rec
 
 Usage:
 
+Create a new .dotties file:
+
+    dotties
+
+List all dotfiles from your home dir:
+
+    dotties -l
+    # or
+    dotties --local
+
+Edit the .dotties file to edit:
+
+    dotties -e
+    # or
+    dotties --edit
+
+Print help.
+
+    dotties -h
+    # or
+    dotties --help
+
+Print the version.
+
+    dotties -v
+    # or
+    dotties --version
 
 EOF
     exit
 }
 
 fn_create() {
-    echo create
-    # open dotties with vim or vscode
+    echo "Creating a dotties file."
+    find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1 >"$dottiesfile"
+    echo "Please run $script_name -e or --edit to edit the file."
 }
 
 fn_gist_upload() {
@@ -53,9 +82,9 @@ fn_gist_upload() {
     # gh gist create "${MAPFILE[@]}"
 }
 
-fn_list() {
-    echo list
-    # list $HOME dotfiles withoug binaries
+fn_local() {
+    echo "All your dotfiles in the home directory:"
+    find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1
 }
 
 fn_recover() {
@@ -64,41 +93,65 @@ fn_recover() {
     # get from a Gist url
 }
 
+fn_read() {
+    cat "$dottiesfile"
+}
+
+fn_edit() {
+    read -rp "Do you want to open it with Vim/v, Emacs/e, or VS code/c?    " EANS
+    ans=$(echo "$EANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+    if [[ $ans = "C" ]]; then
+        check_cmd code || exit
+        code "$dottiesfile"
+    elif [[ $ans = "E" ]]; then
+        "${EDITOR:-emacs}" "$dottiesfile"
+    elif [[ $ans = "V" ]]; then
+        "${EDITOR:-vi}" "$dottiesfile"
+    else
+        echo "Please use either v for vim, e for Emac, or c for VSCode."
+        exit 1
+    fi
+}
+
 fn_start() {
     # 1. If there is the $HOME/.dotties, confirm if you want to create a new dotties. o: open existing .dotties, yes: create a new dotties
+    if [[ -f "$HOME/.dotties" ]]; then
+        # read -r
+        echo "You have the dotties file."
+        read -rp "Do you want to edit it, e/edit or to create a new, n/new.   " ANS
+        ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+        if [[ $ans = "O" ]]; then
+            fn_edit || exit 1
+        elif [[ $ans = "N" ]]; then
+            fn_create || exit
+        else
+            echo "Please answer either O or N."
+            exit 1
+        fi
 
-    # if there is no .dotties, then create a new
-
-    # echo new
-    # find all dotfile name from HOME
-    # tmpfile=$(mktemp /tmp/dotties)
-    dottiesfile=$HOME/.dotties
-    # tmpfile2=$HOME/dotties2
-    : >"$dottiesfile"
-    # touch $tmpfile2
-    # files=()
-    while IFS= read -r -d $'\0'; do
-        # echo "${file##*/}"
-        # files+=($'REPLY\n')
-        echo "$REPLY" >>"$dottiesfile"
-    done < <(find "$HOME" -name ".*" -maxdepth 1 -type f -print0)
-    # mapfile -d $'\0' files < <(find "$HOME" -name ".*" -maxdepth 1 -type f -print0)
-    # files=("${files[@]/*DS_Store/}")
-
+        exit
+    else
+        fn_create || exit
+    fi
 }
 
 main() {
     if (($# > 0)); then
         case $1 in
-        ls | --list)
-            fn_list
+        -l | --local)
+            fn_local
+            exit
+            ;;
+        -e | --edit)
+            fn_edit
+            exit
             ;;
         -g | --gist)
             fn_gist_upload "$2"
             exit
             ;;
-        -r | --recover)
-            fn_recover "$2"
+        -r | --read)
+            fn_read
             exit
             ;;
         -h | --help)
