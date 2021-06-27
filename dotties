@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.1.0"
+version="0.2.0"
 script_name=$0
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
@@ -27,6 +27,30 @@ if [[ $(gh auth status) -eq 1 ]] >&/dev/null; then
     echo ">>> You must logged in. Use 'gh auth login'"
     exit 1
 fi
+
+check_gh_editor() {
+    if [[ -z $(gh config get editor) ]]; then
+        read -rp "Please set your GitHub CLI editor? (v/e/n) (vim/emacs/nano)   " ANS
+        ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+        if [[ $ans = "V" ]]; then
+            check_cmd vim
+            gh_editor="vim"
+        elif [[ $ans = "E" ]]; then
+            check_cmd emacs
+            gh_editor="emacs"
+        elif [[ $ans = "N" ]]; then
+            check_cmd nano
+            gh_editor="nano"
+        else
+            echo "Please select one editor."
+            exit
+        fi
+        gh config set editor $gh_editor
+    fi
+}
+
+check_gh_editor
+gh_editor=$(gh config get editor)
 
 usage() {
     cat <<EOF
@@ -73,23 +97,58 @@ fn_create() {
     echo "Please run $script_name -e or --edit to edit the file."
 }
 
-fn_gist_upload() {
+# write dotties
+_write_dotties_gist() {
     # check if dotties exists and has a length greater than zero., else exit
     if [[ -s $dotties_file ]]; then
         # without mapfile
         arr=()
         IFS=$'\n' read -ra arr -d '' <"$dotties_file"
-        gh gist create "${arr[@]}"
+        gh gist create -d "Created by shinokada/dotties." "${arr[@]}" >"$dotties_gist"
+        echo "Created a secret Gist"
+        read -r gist_url <"$dotties_gist"
+        python -m webbrowser "$gist_url"
     # this works
     # mapfile -t <$dottiesfile
     # gh gist create "${MAPFILE[@]}"
     else
         echo "Please run $script_name, and edit it by $script_name -e."
     fi
-
 }
 
-fn_local() {
+fn_upload_gist() {
+    # if $dotties_gist exist warn if you want to overwrite.
+    if [[ -f $dotties_gist ]]; then
+        echo "You already have Dotties Gist."
+        read -rp "Do you want to overwrite? (y/n/o) (yes/ no/open gist URL)   " ANS
+        ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
+        if [[ $ans = "Y" ]]; then
+            _write_dotties_gist
+            exit
+        elif [[ $ans = "O" ]]; then
+            read -r gist_url <"$dotties_gist"
+            python -m webbrowser "$gist_url"
+            exit
+        else
+            echo "Exiting ..."
+            exit
+        fi
+    fi
+    _write_dotties_gist
+}
+
+fn_update_gist() {
+    if [[ -f $dotties_gist ]]; then
+        read -r gist_url <"$dotties_gist"
+        gh gist edit "$gist_url"
+    else
+        echo "You don't have a dotteis Gist."
+        echo "You must run $script_name -G first to create a Gist."
+        exit 1
+    fi
+}
+
+fn_show_local() {
     echo "All your dotfiles in the home directory:"
     find "$HOME" -maxdepth 1 -exec file {} \; | grep text | cut -d: -f1
 }
@@ -105,19 +164,7 @@ fn_read() {
 }
 
 fn_edit() {
-    read -rp "Do you want to open it with Vim/v, Emacs/e, or VS code/c?    " EANS
-    ans=$(echo "$EANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
-    if [[ $ans = "C" ]]; then
-        check_cmd code || exit
-        code "$dotties_file"
-    elif [[ $ans = "E" ]]; then
-        "${EDITOR:-emacs}" "$dotties_file"
-    elif [[ $ans = "V" ]]; then
-        "${EDITOR:-vi}" "$dotties_file"
-    else
-        echo "Please use either v for vim, e for Emac, or c for VSCode."
-        exit 1
-    fi
+    $gh_editor "$1" || exit 1
 }
 
 fn_start() {
@@ -128,14 +175,14 @@ fn_start() {
     if [[ -f "$dotties_file" ]]; then
         # read -r
         echo "You have the dotties file."
-        read -rp "Do you want to edit it, e/edit or to create a new, n/new.   " ANS
+        read -rp "Do you want to edit it, e/edit or  create a new, n/new.   " ANS
         ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
-        if [[ $ans = "O" ]]; then
-            fn_edit || exit 1
+        if [[ $ans = "E" ]]; then
+            fn_edit "$dotties_file" || exit 1
         elif [[ $ans = "N" ]]; then
-            fn_create || exit
+            fn_create || exit 1
         else
-            echo "Please answer either O or N."
+            echo "Please answer either e/edit or n/new."
             exit 1
         fi
 
@@ -149,15 +196,23 @@ main() {
     if (($# > 0)); then
         case $1 in
         -l | --local)
-            fn_local
+            fn_show_local
             exit
             ;;
         -e | --edit)
-            fn_edit
+            fn_edit "$dotties_file"
             exit
             ;;
-        -g | --gist)
-            fn_gist_upload "$2"
+        -G | --gist)
+            fn_upload_gist
+            exit
+            ;;
+        -U | --updategist)
+            fn_update_gist
+            exit
+            ;;
+        -E | --Edit)
+            fn_edit "$dotties_gist"
             exit
             ;;
         -r | --read)
