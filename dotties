@@ -65,27 +65,47 @@ Create a new .dotties file:
 
 List all dotfiles from your home dir:
 
-    dotties -l
-    # or
-    dotties --local
+    dotties [-l | --local]
 
 Edit the .dotties file to edit:
 
-    dotties -e
-    # or
-    dotties --edit
+    dotties [-e | --edit]
+
+Read the .dotties file:
+
+    dotties [-r | --read]
+
+Create a dotfiles Gist
+
+    dotties [-G | --gist]
+            
+Update the dotfiles Gist
+
+    dotties [-U | --updategist]
+
+View the dotfiles Gist
+
+    dotties [-V | --viewgist]
+
+Clone the dotfiles Gist
+
+    dotties [-C | --clone] -dir
+
+Delete the dotfiles Gist
+
+    dotties [-D | --delete]
+
+Edit the dotfiles Gist
+
+    dotties [-E | --Edit]
 
 Print help.
 
-    dotties -h
-    # or
-    dotties --help
+    dotties [-h | --help]
 
 Print the version.
 
-    dotties -v
-    # or
-    dotties --version
+    dotties [-v | --version]
 
 EOF
     exit
@@ -189,6 +209,11 @@ fn_edit() {
     $gh_editor "$1" || exit 1
 }
 
+fn_view_gist() {
+    read -r gist_url <"$dotties_gist"
+    gh gist view "$gist_url" || exit
+}
+
 fn_start() {
     if [[ ! -d $dotties_dir ]]; then
         mkdir "$dotties_dir"
@@ -232,6 +257,10 @@ main() {
             ;;
         -U | --updategist)
             fn_update_gist
+            exit
+            ;;
+        -V | --viewgist)
+            fn_view_gist
             exit
             ;;
         -C | --clone)
