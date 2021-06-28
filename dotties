@@ -79,9 +79,9 @@ Create a dotfiles Gist
 
     dotties [-G | --gist]
             
-Update the dotfiles Gist
+Edit the dotfiles Gist
 
-    dotties [-U | --updategist]
+    dotties [-E | --editgist]
 
 View the dotfiles Gist
 
@@ -94,10 +94,6 @@ Clone the dotfiles Gist
 Delete the dotfiles Gist
 
     dotties [-D | --delete]
-
-Edit the dotfiles Gist
-
-    dotties [-E | --Edit]
 
 Print help.
 
@@ -157,7 +153,7 @@ fn_upload_gist() {
     _write_dotties_gist
 }
 
-fn_update_gist() {
+fn_edit_gist() {
     if [[ -f $dotties_gist ]]; then
         read -r gist_url <"$dotties_gist"
         gh gist edit "$gist_url"
@@ -206,7 +202,7 @@ fn_read() {
 }
 
 fn_edit() {
-    $gh_editor "$1" || exit 1
+    $gh_editor "$dotties_file" || exit 1
 }
 
 fn_view_gist() {
@@ -248,31 +244,27 @@ main() {
             exit
             ;;
         -e | --edit)
-            fn_edit "$dotties_file"
+            fn_edit
             exit
             ;;
-        -G | --gist)
+        -G | --Gist)
             fn_upload_gist
             exit
             ;;
-        -U | --updategist)
-            fn_update_gist
-            exit
-            ;;
-        -V | --viewgist)
+        -V | --View)
             fn_view_gist
             exit
             ;;
-        -C | --clone)
+        -C | --Clone)
             fn_clone_gist "$2"
             exit
             ;;
-        -D | --delete)
+        -D | --Delete)
             fn_delete_gist
             exit
             ;;
         -E | --Edit)
-            fn_edit "$dotties_gist"
+            fn_edit_gist
             exit
             ;;
         -r | --read)

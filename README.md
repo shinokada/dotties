@@ -48,15 +48,23 @@ Save files in the `.dotties` to a Gist:
 ```sh
 dotties -G
 # or
-dotties --gist
+dotties --Gist
 ```
 
-Update the Dotties Gist
+Edit the Dotties Gist
 
 ```sh
-dotties -U
+dotties -E
 # or
-dotties --updategist
+dotties --Edit
+```
+
+View the Dotties Gist
+
+```sh
+dotties -V
+# or
+dotties --View
 ```
 
 Clone the Dotties Gist
@@ -72,27 +80,8 @@ Delete the Dotties Gist
 ```sh
 dotties -D
 # or
-dotties --delete
+dotties --Delete
 ```
-
-Edit the Dotties Gist
-
-```sh
-dotties -E
-# or
-dotties --Edit
-```
-
-Update a Gist by URL or number
-
-```sh
-dotties -u [Gist number | URL]
-# or
-dotties --update [Gist number | URL]
-```
-
--E | --Edit
-
 
 ### Other options
 
@@ -102,14 +91,6 @@ List all dotfiles from your home dir:
 dotties -l
 # or
 dotties --local
-```
-
-Recover all dotties from a Gist URL.
-
-```sh
-dotties -r [Gist number | URL]
-# or
-dotties --recover [Gist number | URL]
 ```
 
 Print help.
