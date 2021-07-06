@@ -58,49 +58,37 @@ usage() {
 Description: Save all dotfiles in the home directory (default) to a Gist and recover from a Gist.
 
 Usage:
-
 Create a new .dotties file:
-
     dotties
 
 List all dotfiles from your home dir:
-
     dotties [-l | --local]
 
 Edit the .dotties file to edit:
-
     dotties [-e | --edit]
 
 Read the .dotties file:
-
     dotties [-r | --read]
 
 Create a dotfiles Gist
-
     dotties [-G | --gist]
             
 Edit the dotfiles Gist
-
     dotties [-E | --editgist]
 
 View the dotfiles Gist
-
     dotties [-V | --viewgist]
 
 Clone the dotfiles Gist
-
     dotties [-C | --clone] -dir
 
 Delete the dotfiles Gist
-
     dotties [-D | --delete]
 
 Print help.
-
     dotties [-h | --help]
 
 Print the version.
-
     dotties [-v | --version]
 
 EOF
@@ -114,7 +102,7 @@ fn_create() {
 }
 
 # write dotties
-_write_dotties_gist() {
+_upload_dotties_gist() {
     # check if dotties exists and has a length greater than zero., else exit
     if [[ -s $dotties_file ]]; then
         # without mapfile
@@ -136,10 +124,10 @@ fn_upload_gist() {
     # if $dotties_gist exist warn if you want to overwrite.
     if [[ -f $dotties_gist ]]; then
         echo "You already have Dotties Gist."
-        read -rp "Do you want to overwrite? (y/n/o) (yes/ no/open gist URL)   " ANS
+        read -rp "Do you want to overwrite? (y/n/o) (yes/no/open gist URL)   " ANS
         ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
         if [[ $ans = "Y" ]]; then
-            _write_dotties_gist
+            _upload_dotties_gist
             exit
         elif [[ $ans = "O" ]]; then
             read -r gist_url <"$dotties_gist"
@@ -150,7 +138,7 @@ fn_upload_gist() {
             exit
         fi
     fi
-    _write_dotties_gist
+    _upload_dotties_gist
 }
 
 fn_edit_gist() {

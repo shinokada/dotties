@@ -25,6 +25,8 @@ Create a new `.dotties` file:
 dotties
 ```
 
+This will pick up all dotfiles from your Home dir and write them in the `.dotties` file.
+
 Edit the `.dotties` file to edit:
 
 ```sh
@@ -33,6 +35,8 @@ dotties -e
 dotties --edit
 ```
 
+Your terminal editor will open the `dotties` file.
+
 Read the `dotties` file:
 
 ```sh
@@ -40,6 +44,8 @@ dotties -r
 # or
 dotties --read
 ```
+
+This will print your `.dotties` content on your terminal.
 
 ### Gist related options
 
@@ -51,6 +57,9 @@ dotties -G
 dotties --Gist
 ```
 
+This will upload all your dotfiles in the `.dotties` to a Gist.
+The Gist URL will be stored in the `~/.dotties/gisturl` file.
+
 Edit the Dotties Gist
 
 ```sh
@@ -58,6 +67,8 @@ dotties -E
 # or
 dotties --Edit
 ```
+
+The GitHub CLI will open your Gist to edit/submit/cancel.
 
 View the Dotties Gist
 
@@ -67,13 +78,17 @@ dotties -V
 dotties --View
 ```
 
+The GitHub CLI will view the Gist.
+
 Clone the Dotties Gist
 
 ```sh
-dotties -C
+dotties -C target-dir
 # or
 dotties --clone
 ```
+
+This will clone the dotfile Gist. If the target dir isn't given it will clone to the current directory.
 
 Delete the Dotties Gist
 
