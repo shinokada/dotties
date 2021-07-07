@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.2.1"
+version="0.2.2"
 script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
