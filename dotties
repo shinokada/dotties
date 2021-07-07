@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 version="0.2.1"
-script_name=$0
+script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
 dotties_file=$HOME/.dotties/dottiesfile
@@ -9,17 +9,12 @@ dotties_file=$HOME/.dotties/dottiesfile
 check_cmd() {
     if [[ ! $(command -v "$1") ]]; then
         echo "It seems like you don't have $1."
-        echo "Please install $1. A mac user, you can try brew insatll $1."
+        echo "Please install $1. If you are a mac user, you can try brew insatll $1."
         exit 1
     fi
 }
 
 check_cmd gh
-
-# if ((BASH_VERSINFO[0] < 4)); then
-#     printf '%s\n' "Error: This requires Bash v4.0 or higher. You have version $BASH_VERSION." 1>&2
-#     exit 2
-# fi
 
 # check if you are logged in github
 if [[ $(gh auth status) -eq 1 ]] >&/dev/null; then
