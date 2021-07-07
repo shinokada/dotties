@@ -173,7 +173,8 @@ fn_delete_gist() {
     read -rp "Are you sure to delete the dotties gist? (y/n) (yes/no)   " ANS
     ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
     if [[ $ans = "Y" ]]; then
-        gh gist delete "$dotties_gist" && rm "$dotties_gist" || exit
+        gh gist delete "$(<"$dotties_gist")"
+        rm "$dotties_gist" || exit
     else
         echo "Exiting..."
         exit
