@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.2.4"
+version="0.2.5"
 script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
@@ -117,7 +117,7 @@ _upload_dotties_gist() {
 
 fn_upload_gist() {
     # if $dotties_gist exist warn if you want to overwrite.
-    if [[ -f $dotties_gist ]]; then
+    if [[ -s $dotties_gist ]]; then
         echo "You already have Dotties Gist."
         read -rp "Do you want to overwrite? (y/n/o) (yes/no/open gist URL)   " ANS
         ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
