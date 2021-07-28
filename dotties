@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.2.3"
+version="0.2.4"
 script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
@@ -126,7 +126,7 @@ fn_upload_gist() {
             exit
         elif [[ $ans = "O" ]]; then
             read -r gist_url <"$dotties_gist"
-            python -m webbrowser "$gist_url"
+            python3 -m webbrowser "$gist_url"
             exit
         else
             echo "Exiting ..."
