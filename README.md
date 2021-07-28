@@ -8,6 +8,7 @@ It saves specified dotfiles in the home directory to a Gist and clone them from 
 ## Requirement
 
 GitHub CLI gh
+Python to open a browser
 
 ## Installation
 

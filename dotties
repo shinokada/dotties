@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.2.2"
+version="0.2.3"
 script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
@@ -106,7 +106,7 @@ _upload_dotties_gist() {
         gh gist create -d "Created by shinokada/dotties." "${arr[@]}" >"$dotties_gist"
         echo "Created a secret Gist"
         read -r gist_url <"$dotties_gist"
-        python -m webbrowser "$gist_url"
+        python3 -m webbrowser "$gist_url"
     # this works
     # mapfile -t <$dottiesfile
     # gh gist create "${MAPFILE[@]}"
@@ -175,6 +175,7 @@ fn_delete_gist() {
     if [[ $ans = "Y" ]]; then
         gh gist delete "$(<"$dotties_gist")"
         rm "$dotties_gist" || exit
+        echo "Deleted the remote and local Gist files."
     else
         echo "Exiting..."
         exit
