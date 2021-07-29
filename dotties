@@ -103,7 +103,10 @@ _upload_dotties_gist() {
         # without mapfile
         arr=()
         IFS=$'\n' read -ra arr -d '' <"$dotties_file"
-        gh gist create -d "Created by shinokada/dotties." "${arr[@]}" >"$dotties_gist"
+        gh gist create -d "Created by shinokada/dotties." "${arr[@]}" >"$dotties_gist" || {
+            echo "Your file(s) is not readable. Check the permission."
+            exit
+        }
         echo "Created a secret Gist"
         read -r gist_url <"$dotties_gist"
         python3 -m webbrowser "$gist_url"
