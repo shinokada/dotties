@@ -7,8 +7,24 @@ It saves specified dotfiles in the home directory to a Gist and clone them from 
 
 ## Requirement
 
-GitHub CLI gh
-Python to open a browser
+- GitHub CLI gh
+
+Homebrew/LinuxBrew
+
+```sh
+brew install gh
+```
+
+### Warning to Ubuntu/Debian users about snap
+
+For Ubuntu/Debian, use `apt`. `snap` won't work with hidden files.
+[Download a Debian package (.ddb)](https://github.com/cli/cli/releases) and double click the downloaded file or run:
+
+```sh
+sudo apt install ./gh_1.13.1_linux_amd64.deb
+```
+
+- Python to open a browser
 
 ## Installation
 
