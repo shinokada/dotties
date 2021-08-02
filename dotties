@@ -101,6 +101,7 @@ _upload_dotties_gist() {
     # check if dotties exists and has a length greater than zero., else exit
     if [[ -s $dotties_file ]]; then
         # without mapfile
+        echo " You have dotties file ..."
         arr=()
         IFS=$'\n' read -ra arr -d '' <"$dotties_file"
         gh gist create -d "Created by shinokada/dotties." "${arr[@]}" >"$dotties_gist" || {
@@ -120,13 +121,14 @@ _upload_dotties_gist() {
 
 fn_upload_gist() {
     # if $dotties_gist exist warn if you want to overwrite.
+    echo "Checking ..."
     NUM_CHAR=$(wc -c <"$dotties_gist")
     if [ -s "$dotties_gist" ] && [ "$NUM_CHAR" -gt 10 ]; then
         echo "You already have Dotties Gist."
         read -rp "Do you want to overwrite? (y/n/o) (yes/no/open gist URL)   " ANS
         ans=$(echo "$ANS" | cut -c 1-1 | tr "[:lower:]" "[:upper:]")
         if [[ $ans = "Y" ]]; then
-            # _upload_dotties_gist
+            _upload_dotties_gist
             exit
         elif [[ $ans = "O" ]]; then
             read -r gist_url <"$dotties_gist"
@@ -137,6 +139,7 @@ fn_upload_gist() {
             exit
         fi
     fi
+    echo "Moving to upload dotties gist ..."
     _upload_dotties_gist
 }
 

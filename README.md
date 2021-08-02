@@ -15,7 +15,7 @@ Python to open a browser
 Using [Awesome package manager](https://github.com/shinokada/awesome):
 
 ```sh
-awesome -i shinokada/dotties
+awesome install shinokada/dotties
 ```
 
 ## Usage
