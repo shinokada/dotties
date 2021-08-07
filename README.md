@@ -18,7 +18,7 @@ brew install gh
 ### Warning to Ubuntu/Debian users about snap
 
 For Ubuntu/Debian, use `apt`. `snap` won't work with hidden files.
-[Download a Debian package (.ddb)](https://github.com/cli/cli/releases) and double click the downloaded file or run:
+[Download a Debian package (.deb) file](https://github.com/cli/cli/releases) and double click the downloaded file or run:
 
 ```sh
 sudo apt install ./gh_1.13.1_linux_amd64.deb
@@ -28,10 +28,25 @@ sudo apt install ./gh_1.13.1_linux_amd64.deb
 
 ## Installation
 
-Using [Awesome package manager](https://github.com/shinokada/awesome):
+### [Awesome package manager](https://github.com/shinokada/awesome)
 
 ```sh
 awesome install shinokada/dotties
+```
+
+### Homebrew/Linuxbrew
+
+```sh
+brew tap shinokada/dotties
+brew install dotties
+```
+
+### Linux/Debian/Ubuntu
+
+Download the latest deb file from the [release page](https://github.com/shinokada/dotties/releases).
+
+```sh
+sudo apt install dotties_XXXXXXX.deb
 ```
 
 ## Usage
