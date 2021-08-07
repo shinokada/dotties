@@ -66,19 +66,19 @@ Read the .dotties file:
     dotties [-r | --read]
 
 Create a dotfiles Gist
-    dotties [-G | --gist]
+    dotties [-G | --Gist]
             
 Edit the dotfiles Gist
-    dotties [-E | --editgist]
+    dotties [-E | --Edit]
 
 View the dotfiles Gist
-    dotties [-V | --viewgist]
+    dotties [-V | --View]
 
 Clone the dotfiles Gist
-    dotties [-C | --clone] -dir
+    dotties [-C | --Clone] -dir
 
 Delete the dotfiles Gist
-    dotties [-D | --delete]
+    dotties [-D | --Delete]
 
 Print help.
     dotties [-h | --help]
