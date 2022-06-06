@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="0.2.6"
+version="0.3.0"
 script_name=$(basename "$0")
 dotties_dir=$HOME/.dotties
 dotties_gist=$HOME/.dotties/gisturl
@@ -53,7 +53,7 @@ usage() {
 Description: Save all dotfiles in the home directory (default) to a Gist and recover from a Gist.
 
 Usage:
-Create a new .dotties file:
+Create a new .dotties file with all your dotfiles.:
     dotties
 
 List all dotfiles from your home dir:
@@ -65,9 +65,9 @@ Edit the .dotties file to edit:
 Read the .dotties file:
     dotties [-r | --read]
 
-Create a dotfiles Gist
+Create Gists from .dotties file:
     dotties [-G | --Gist]
-            
+
 Edit the dotfiles Gist
     dotties [-E | --Edit]
 
@@ -80,8 +80,14 @@ Clone the dotfiles Gist
 Delete the dotfiles Gist
     dotties [-D | --Delete]
 
+Print content of all dotfiles from "$dotties_file"
+    dotties [-p | --print]
+
 Print help.
     dotties [-h | --help]
+
+Print empty file names
+    dotties [i | --isempty]
 
 Print the version.
     dotties [-v | --version]
@@ -193,8 +199,26 @@ fn_read() {
     cat "$dotties_file"
 }
 
+fn_print(){
+    echo "Printing all dotties ..."
+    while read -r line; do
+        echo "Printing 10 lines from $line ..."
+        head -10 "$line"
+    done <"$dotties_file"
+    echo "Done!"
+}
+
 fn_edit() {
     $gh_editor "$dotties_file" || exit 1
+}
+
+fn_isempty() {
+    while read -r line; do
+        if [[ -z $(grep '[^[:space:]]' "$line") ]]; then
+            echo "Empty file: $line"
+        fi
+    done <"$dotties_file"
+    echo "Done"    
 }
 
 fn_view_gist() {
@@ -263,8 +287,16 @@ main() {
             fn_read
             exit
             ;;
+        -p | --print)
+            fn_print
+            exit
+            ;;
         -h | --help)
             usage
+            ;;
+        -i | --isempty)
+            fn_isempty
+            exit
             ;;
         -v | --version)
             echo "${version}"

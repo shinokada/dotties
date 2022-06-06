@@ -3,7 +3,7 @@
 ## Overview
 
 Dotties is a simple dotfile management script.
-It saves specified dotfiles in the home directory to a Gist and clone them from the Gist.
+It saves specified dotfiles in the home directory to a secret Gist and clone them from the Gist.
 
 ## Requirement
 
@@ -51,7 +51,7 @@ sudo apt install dotties_XXXXXXX.deb
 
 ## Usage
 
-Create a new `.dotties` file:
+### Create a new `.dotties` file with all dotfiles in your Home directory
 
 ```sh
 dotties
@@ -59,7 +59,11 @@ dotties
 
 This will pick up all dotfiles from your Home dir and write them in the `.dotties` file.
 
-Edit the `.dotties` file to edit:
+### Is empty
+
+Run `dotties -i` or `dotties --isempty` to print files with empty content.
+
+### Edit the `.dotties` file to edit:
 
 ```sh
 dotties -e
@@ -69,7 +73,7 @@ dotties --edit
 
 Your terminal editor will open the `dotties` file.
 
-Read the `dotties` file:
+### Read the `dotties` file:
 
 ```sh
 dotties -r
@@ -79,9 +83,7 @@ dotties --read
 
 This will print your `.dotties` content on your terminal.
 
-### Gist related options
-
-Save files in the `.dotties` to a Gist:
+### Save contents from files in the `.dotties` to a secret Gist
 
 ```sh
 dotties -G
@@ -92,7 +94,7 @@ dotties --Gist
 This will upload all your dotfiles in the `.dotties` to a Gist.
 The Gist URL will be stored in the `~/.dotties/gisturl` file.
 
-Edit the Dotties Gist
+### Edit the Dotties Gist
 
 ```sh
 dotties -E
@@ -102,7 +104,7 @@ dotties --Edit
 
 The GitHub CLI will open your Gist to edit/submit/cancel.
 
-View the Dotties Gist
+### View the Dotties Gist
 
 ```sh
 dotties -V
@@ -112,7 +114,7 @@ dotties --View
 
 The GitHub CLI will view the Gist.
 
-Clone the Dotties Gist
+### Clone the Dotties Gist
 
 ```sh
 dotties -C target-dir
@@ -122,7 +124,7 @@ dotties --clone
 
 This will clone the dotfile Gist. If the target dir isn't given it will clone to the current directory.
 
-Delete the Dotties Gist
+### Delete the Dotties Gist
 
 ```sh
 dotties -D
