@@ -1,4 +1,13 @@
-# Dotties
+<h1 align="center">Dotties</h1>
+
+<p align="center">
+<a href="https://shinokada.github.io/dotties/">Dotties</a>
+</p>
+
+<p align="center">
+<a href="https://twitter.com/shinokada" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@shinokada-4BBAAB.svg" alt="Created by Shin Okada"></a>
+<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/shinokada/dotties" alt="License"></a>
+</p>
 
 ## Overview
 
