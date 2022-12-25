@@ -1,7 +1,7 @@
 <h1 align="center">Dotties</h1>
 
 <p align="center">
-<a href="https://shinokada.github.io/dotties/">Dotties</a>
+<a href="https://dotties.codewithshin.com/">Dotties</a>
 </p>
 
 <p align="center">
